@@ -19,20 +19,64 @@ const schema = {
       format: 'port',
       default: null,
       env: 'PORT'
+    }
+  },
+  db: {
+    database: {
+      doc: 'The name of the database',
+      format: String,
+      default: 'wyze_route',
+      env: 'DB_NAME'
     },
-    startWorkers: {
-      doc: 'Number of workers to start',
-      format: 'integer',
-      default: 1,
-      env: 'WORKERS'
+    username: {
+      doc: 'The username which is used to authenticate against the database.',
+      format: String,
+      default: 'root',
+      env: 'DB_USERNAME'
+    },
+    password: {
+      doc: 'The password which is used to authenticate against the database.',
+      format: String,
+      default: '',
+      env: 'DB_PASSWORD'
+    },
+    options: {
+      dialect: {
+        doc: 'The dialect of the database you are connecting to. One of mysql, postgres, sqlite and mssql.',
+        format: ['mysql', 'postgres', 'sqlite', 'mssql'],
+        default: 'mysql',
+        env: 'DB_DIALECT'
+      },
+      dialectModulePath: {
+        doc: 'If specified, load the dialect library from this path.',
+        format: String,
+        default: 'mysql2',
+        env: 'DB_DIALECT_PATH'
+      },
+      host: {
+        doc: 'The host of the relational database.',
+        format: String,
+        default: 'localhost',
+        env: 'DB_HOST'
+      },
+      port: {
+        doc: 'The port of the relational database.',
+        format: 'port',
+        default: 3306,
+        env: 'DB_PORT'
+      },
+      protocol: {
+        doc: 'The protocol of the relational database.',
+        format: String,
+        default: 'tcp',
+        env: 'DB_PROTOCOL'
+      }
     }
   }
 };
 
 const config = convict(schema);
 const env = config.get('env');
-
-config.set('server.startWorkers', require("os").cpus().length);
 
 config.loadFile([
   `${__dirname}/common.json`,
